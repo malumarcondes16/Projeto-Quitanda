@@ -3,7 +3,7 @@ import sqlite3 as sql
 import uuid
 
 app = Flask(__name__)
-app.secret_key = "QuitandaDoZe"
+app.secret_key = "quitandazezinho"
 
 usuario = "malu"
 senha = "130909"
@@ -42,5 +42,12 @@ def index():
     title = "Home"
     return render_template("home.html", produtos = produtos, title = title)
 
+#ROTA DA PÁGINA LOGIN
+@app.route("/login")
+def login():
+    title ="Login"
+    return render_template("login.html", title = title)
+
 #FINAL DO CÓDIGO - EXECUTANDO O SERVIDOR
 app.run(debug = True)
+
