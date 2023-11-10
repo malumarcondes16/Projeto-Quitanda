@@ -48,6 +48,69 @@ def login():
     title ="Login"
     return render_template("login.html", title = title)
 
+#ROTA DA PÁGINA ACESSO
+
+@app.route("/acesso", methods=['post'])
+def acesso():
+    global usuario, senha
+    usuario_informado = request.form["usuario"]
+    senha_informada = request.form["senha"]
+    if usuario == usuario_informado and senha == senha_informada:
+        session["login"] = True
+        return redirect('/adm')
+    else:
+        return
+        render_template("login.html", msg="Usúario/Senha estão incorretos!")
+
+# ROTA DA PÁGINA ADM 
+@app.route("/adm")
+def adm():
+    if verifica_sessao():
+        iniciar_db()
+        conexao = conecta_database()
+        produtos = conexao.execute('SELECT * FROM produtos ORDER BY id_prod DESC').fetchall()
+        conexao.close()
+        title="Administração"
+        return render_template("adm.html", produtos=produtos, title=title)
+    else:
+        return redirect("/login")
+    
+#CÓDIGO DO LOGOUT
+@app.route("/logout")
+def logout():
+    global login
+    login = False
+    session.clear()
+    return redirect('/')
+
+#ROTA DA PÁGINA DE CADASTRO
+@app.route("/cadprodutos")
+def cadprodutos():
+    if verifica_sessao():
+        title = "Cadastro de produtos"
+        return render_template("cadprodutos.html, title=title")
+    else:
+        return redirect("/login")
+    
+#ROTA DA PÁGINA DE CADASTRO NO BANCO
+@app.route("/cadastro", methods=['post'])
+def cadastro():
+    if verifica_sessao():
+        nome_prod=request.form['nome_prod']
+        desc_prod=request.form['desc_prod']
+        preco_prod=request.form['preco_prod']
+        img_prod=request.files['img_prod']
+        id_foto=str(uuid.uuid4().hex)
+        filename=id_foto+nome_prod+'.png'
+        img_prod.save("static/img/produtos/"+filename)
+        conexao=conecta_database()
+        conexao.execute('INSERT INTO produtos (nome-prod, desc_prod, preco_prod, img_prod) VALUES(?, ?, ?, ?)', (nome_prod, desc_prod, preco_prod, filename))
+        conexao.commit()
+        conexao.close()
+        return redirect("/adm")
+    else:
+        return redirect('/login')
+
 #FINAL DO CÓDIGO - EXECUTANDO O SERVIDOR
 app.run(debug = True)
 

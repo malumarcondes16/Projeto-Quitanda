@@ -57,8 +57,10 @@
         </div>
     </nav>
  </header>
- <main class=" flex-fill">
+ <main class="flex-fill py-4">
+    {% block conteudo %}
 
+    {% endblock %}
  </main>
  <footer class="border-top bg-light shadow border-3 border-dark border-opacity-25">
     <div class="container">
@@ -69,8 +71,9 @@
                 <br>CNPJ 99.999.999/0001-99
             </div>
             <div class="col-12 col-md-4 text-center">
-                Política de Privacidade<br>Termos de uso<br>Trocas e Devoluções
-            <br>
+                Política de Privacidade<br>Termos de uso<br>Trocas e Devoluções<br>
+                <a href="/adm" class="text-decoration-none text-center">Área administrativa
+                </a>
             </div>
             <div class="col-12 col-md-4 text-center">
                 Contato pelo Site<br>E-mail: contato@quitandadoze.com.br<br>Cel: (15) 99999-9999
